@@ -1,0 +1,110 @@
+766. Toeplitz Matrix
+Easy
+
+Given an m x n matrix, return true if the matrix is Toeplitz. Otherwise, return false.
+
+A matrix is Toeplitz if every diagonal from top-left to bottom-right has the same elements.
+
+ 
+
+Example 1:
+
+
+Input: matrix = [[1,2,3,4],[5,1,2,3],[9,5,1,2]]
+Output: true
+Explanation:
+In the above grid, the diagonals are:
+"[9]", "[5, 5]", "[1, 1, 1]", "[2, 2, 2]", "[3, 3]", "[4]".
+In each diagonal all elements are the same, so the answer is True.
+Example 2:
+
+
+Input: matrix = [[1,2],[2,2]]
+Output: false
+Explanation:
+The diagonal "[1, 2]" has different elements.
+ 
+
+########################################################################################################################################
+
+
+Traverse through the array to check the next element matrix[i + 1][j + 1] if it is different.
+
+If all is the same, then return through.
+
+Extra:
+For the follow up scenarios of loading one row at a time and partial disc, we can store a row / column of date in a Linked List.
+
+As we traverse, we continue to shift the elements by adding the new element at Index 0 and remove the last element from the Linked List.
+Note that we are shifting the elements to the left if we check by rows, and shift the elements down if we check by columns.
+
+    // One row at a time.
+    // For this, we use a Linked List to add the new element into index 0 and remove the last element,
+    // to check if it is the same as the previous row.
+    // For Example:
+    // [[ 0 1 2 3 4 ]
+    //  [ 9 0 1 2 3 ]
+    //  [ 8 9 0 1 2 ]
+    //  [ 7 8 9 0 1 ]
+    //  [ 6 7 8 9 0 ]]
+    //
+    // We compare [ 0 1 2 3 4 ] with [ 9 0 1 2 3 ], if the 0, 1, 2 and 3 is identical, proceed the next line,
+    // but update by removing the last element in the list (integer 4), and at integer 9 at index 0.
+For the partial disc, we need to check if we have the full column length or full row length, as we need to store the full length of a row or column to be able to check everything.
+
+    // Partial Disc.
+    // For Example:
+    // [[ 0 1 2 ]   [[ 3 4 ]
+    //  [ 9 0 1 ]    [ 2 3 ]
+    //  [ 8 9 0 ]    [ 1 2 ]
+    //  [ 7 8 9 ]    [ 0 1 ]
+    //  [ 6 7 8 ]]   [ 9 0 ]]
+    //
+    // Here, we need to store the data of the column.
+    //
+    // For Example:
+    // [[ 0 1 2 3 4 ]   [[ 7 8 9 0 1 ]
+    //  [ 9 0 1 2 3 ]    [ 6 7 8 9 0 ]]
+    //  [ 8 9 0 1 2 ]]
+    //
+    // Here, we need to store the data of the row.
+    
+    
+    #############################################################################################################
+    
+    class Solution {
+    public boolean isToeplitzMatrix(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i + 1 < m && j + 1 < n && matrix[i][j] != matrix[i + 1][j + 1]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+
+
+##################################################################################################
+
+class Solution {
+    public boolean isToeplitzMatrix(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                // Make sure to check if i + 1 and j + 1 is within the matrix.
+                // If not, there will be IndexOutOfBound error.
+                if (i + 1 < m && j + 1 < n && matrix[i][j] != matrix[i + 1][j + 1]) {
+                    return false;
+                }
+            }
+        }
+        // If successfully traverse the whole array, return true.
+        return true;
+    }
+}
